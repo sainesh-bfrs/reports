@@ -7,14 +7,13 @@ import (
 )
 
 //Router ...
-func Router() *gin.Engine {
+func Router(r *gin.Engine) *gin.Engine {
 	var u *controllers.UsersController
 	var c *controllers.CompaniesController
-	r := gin.Default()
 	v1 := r.Group("v1")
 	{
-		v1.GET("/users", u.Get())
-		v1.GET("/companies", c.Get())
+		v1.GET("/users", u.Get())     // /v1/users
+		v1.GET("/companies", c.Get()) // /v1/companies
 	}
 	return r
 }

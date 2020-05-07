@@ -1,7 +1,11 @@
 package controllers
 
 import (
+	"log"
+	"reports/utilities"
+
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 )
 
 //UsersController ...
@@ -11,20 +15,18 @@ type UsersController struct {
 // Get ...
 func (u *UsersController) Get() gin.HandlerFunc {
 	fn := func(ctx *gin.Context) {
-		// conn, ok := ctx.MustGet("db").(sqlx.DB)
+		db, _ := ctx.MustGet("db").(*sqlx.DB)
 
-		// if !ok {
-		// 	panic("Error")
-		// }
+		rows, err := db.Queryx("select * from users")
 
-		// rows, err := conn.Queryx("select * from users")
+		if err != nil {
+			log.Print(err)
+		}
 
-		// if err != nil {
-		// 	panic("Error")
-		// }
+		a := utilities.MapScanExtended(rows)
 
 		ctx.JSON(200, gin.H{
-			"message": "pong",
+			"users": a,
 		})
 	}
 	return gin.HandlerFunc(fn)
