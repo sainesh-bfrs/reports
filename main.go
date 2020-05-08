@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"reports/conf"
+	"reports/middlewares"
 	"reports/routes"
 
 	"github.com/gin-gonic/gin"
@@ -10,14 +11,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/spf13/viper"
 )
-
-// DatabaseMiddleware ...
-func DatabaseMiddleware(db *sqlx.DB) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		ctx.Set("db", db)
-		ctx.Next()
-	}
-}
 
 func main() {
 
@@ -37,7 +30,7 @@ func main() {
 
 	r := gin.Default()
 
-	r.Use(DatabaseMiddleware(db))
+	r.Use(middlewares.DatabaseMiddleware(db))
 
 	router := routes.Router(r)
 
