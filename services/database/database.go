@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"log"
 	"reports/config"
+	"reports/helpers"
 
 	"github.com/jinzhu/gorm"
 
@@ -35,10 +36,9 @@ func init() {
 
 	var err error
 	var cfg = config.Config
-	DB, _ = gorm.Open("mysql", dbURL(cfg))
-	if err != nil {
-		log.Fatal(2, err)
-	}
+	DB, err = gorm.Open("mysql", dbURL(cfg))
+
+	helpers.LogError("Error in creating connection", err)
 
 	DB.LogMode(true)
 	DB.SingularTable(true)

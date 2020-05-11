@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"reports/config"
 	"reports/helpers"
 	"reports/routes"
+	"reports/services/database"
 	"reports/services/queue"
 
 	"github.com/gin-gonic/gin"
@@ -76,7 +78,10 @@ func initReceiver() {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
-
+			rows, err := database.DB.Raw("select * from users;").Rows()
+			helpers.LogError("Error in runnig query", err)
+			res := helpers.MapScan(rows)
+			fmt.Print(res)
 			d.Ack(false)
 		}
 	}()
