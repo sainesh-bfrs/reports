@@ -1,0 +1,31 @@
+#debug or release
+RUN_MODE = debug
+[app]
+PAGE_SIZE = 10
+
+[server]
+HTTP_PORT = 7777
+READ_TIMEOUT = 60
+WRITE_TIMEOUT = 60
+
+[database]
+TYPE = mysql
+USER = root
+PASSWORD = password
+HOST = 127.0.0.1:3306
+NAME = multi_tracking
+TABLE_PREFIX =
+
+[queue]
+USER = guest
+PASSWORD = guest
+HOST = 127.0.0.1:5672
+
+[redis]
+HOST = 127.0.0.1:16379
+PASSWORD = pang123
+INDEX = 1
+
+[jwt]
+JWTSECRET = 9C27D0C7C04BDA8A1F1B099CF4F9B1956AF5164F
+TOKEN_EXPIRE = 86400

@@ -6,14 +6,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//Router ...
-func Router(r *gin.Engine) *gin.Engine {
-	var u *controllers.UsersController
-	var c *controllers.CompaniesController
+var bookCtl = new(controllers.BookController)
+
+// Router ...
+func Router() *gin.Engine {
+	r := gin.New()
+	r.Use(gin.Recovery())
+	r.Use(gin.Logger())
 	v1 := r.Group("v1")
 	{
-		v1.GET("/users", u.Get())     // /v1/users
-		v1.GET("/companies", c.Get()) // /v1/companies
+		v1.GET("/book", bookCtl.ListBook)
+		v1.POST("/book", bookCtl.AddNewBook)
+		v1.GET("/book/:id", bookCtl.GetOneBook)
+		v1.PUT("/book/:id", bookCtl.PutOneBook)
+		v1.DELETE("/book/:id", bookCtl.DeleteBook)
 	}
 	return r
 }
