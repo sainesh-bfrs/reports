@@ -3,6 +3,7 @@ module reports
 go 1.14
 
 require (
+	github.com/aws/aws-sdk-go v1.30.25
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-ini/ini v1.55.0

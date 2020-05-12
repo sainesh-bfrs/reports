@@ -39,6 +39,16 @@ type ServerConfig struct {
 	RedisIndex     string
 	JwtSecret      string
 	JwtTokenExpire int64
+	AwsKey         string
+	AwsSecret      string
+	AwsRegion      string
+	AwsBucket      string
+	MailHost       string
+	MailUsername   string
+	MailPassword   string
+	MailFrom       string
+	MailFromName   string
+	MailPort       string
 }
 
 // LoadServerConfig ...
@@ -56,6 +66,8 @@ func init() {
 	queue, _ := ConfigFile.GetSection("queue")
 	redis, _ := ConfigFile.GetSection("redis")
 	jwt, _ := ConfigFile.GetSection("jwt")
+	aws, _ := ConfigFile.GetSection("aws")
+	mail, _ := ConfigFile.GetSection("mail")
 
 	Config.RunMode = ConfigFile.Section("").Key("RUN_MODE").MustString("debug")
 	Config.HTTPPort = server.Key("HTTP_PORT").MustInt()
@@ -75,6 +87,23 @@ func init() {
 	Config.RedisIndex = redis.Key("INDEX").MustString("")
 	Config.JwtSecret = jwt.Key("JWTSECRET").MustString("")
 	Config.JwtTokenExpire = jwt.Key("TOKEN_EXPIRE").MustInt64(0)
+
+	// S3 config
+
+	Config.AwsKey = aws.Key("S3_KEY").MustString("")
+	Config.AwsSecret = aws.Key("S3_SECRET").MustString("")
+	Config.AwsRegion = aws.Key("S3_REGION").MustString("")
+	Config.AwsBucket = aws.Key("S3_BUCKET").MustString("")
+
+	//Mail Config
+
+	Config.MailHost = mail.Key("MAIL_HOST").MustString("")
+	Config.MailUsername = mail.Key("MAIL_USERNAME").MustString("")
+	Config.MailPassword = mail.Key("MAIL_PASSWORD").String()
+	Config.MailFrom = mail.Key("MAIL_FROM").MustString("")
+	Config.MailFromName = mail.Key("MAIL_FROM_NAME").MustString("")
+	Config.MailPort = mail.Key("MAIL_PORT").MustString("")
+
 	log.Println("Server Config Initialized with following values")
 	log.Printf("%+v\n", Config)
 }

@@ -1,5 +1,11 @@
 package helpers
 
+/*
+ * File: sqlmapper.go
+ * File Created: Monday, 11th May 2020
+ * Author: Sainesh Mamgain (saineshmamgain@gmail.com)
+ */
+
 import (
 	"database/sql"
 )

@@ -1,12 +1,18 @@
 package main
 
+/*
+ * File: main.go
+ * File Created: Monday, 11th May 2020
+ * Author: Sainesh Mamgain (saineshmamgain@gmail.com)
+ */
+
 import (
-	"fmt"
 	"log"
 	"reports/config"
 	"reports/helpers"
-	"reports/routes"
+	"reports/services/aws"
 	"reports/services/database"
+	"reports/services/mail"
 	"reports/services/queue"
 
 	"github.com/gin-gonic/gin"
@@ -27,9 +33,9 @@ func main() {
 
 	initReceiver()
 
-	router := routes.Router()
+	// router := routes.Router()
 
-	router.Run()
+	// router.Run()
 
 }
 
@@ -78,10 +84,24 @@ func initReceiver() {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
-			rows, err := database.DB.Raw("select * from users;").Rows()
+			rows, err := database.DB.Raw("select id, company_id, first_name, last_name from users;").Rows()
 			helpers.LogError("Error in runnig query", err)
 			res := helpers.MapScan(rows)
-			fmt.Print(res)
+
+			data := helpers.PrepareCSVData(res)
+
+			helpers.WriteCSV(data, "storage/data.csv")
+
+			url := aws.Upload("storage/data.csv", "test/data.csv")
+
+			mailer := mail.Mailer{
+				To:      []string{"sainesh.mamgain@kartrocket.com"},
+				Subject: "Test Mail",
+				Body:    "URL for file: " + url,
+			}
+
+			mailer.Send()
+
 			d.Ack(false)
 		}
 	}()

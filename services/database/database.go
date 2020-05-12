@@ -1,9 +1,9 @@
 package database
 
 /*
- * @Script: database.go
- * @Author: Sainesh
- * @Description: database service.
+ * File: database.go
+ * File Created: Monday, 11th May 2020
+ * Author: Sainesh Mamgain (saineshmamgain@gmail.com)
  */
 
 import (
