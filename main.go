@@ -10,10 +10,8 @@ import (
 	"log"
 	"reports/config"
 	"reports/helpers"
-	"reports/services/aws"
-	"reports/services/database"
-	"reports/services/mail"
 	"reports/services/queue"
+	reportshandler "reports/services/reports-handler"
 
 	"github.com/gin-gonic/gin"
 )
@@ -84,23 +82,25 @@ func initReceiver() {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
-			rows, err := database.DB.Raw("select id, company_id, first_name, last_name from users;").Rows()
-			helpers.LogError("Error in runnig query", err)
-			res := helpers.MapScan(rows)
+			// rows, err := database.DB.Raw("select id, company_id, first_name, last_name from users;").Rows()
+			// helpers.LogError("Error in runnig query", err)
+			// res := helpers.MapScan(rows)
 
-			data := helpers.PrepareCSVData(res)
+			// data := helpers.PrepareCSVData(res)
 
-			helpers.WriteCSV(data, "storage/data.csv")
+			// helpers.WriteCSV(data, "storage/data.csv")
 
-			url := aws.Upload("storage/data.csv", "test/data.csv")
+			// url := aws.Upload("storage/data.csv", "test/data.csv")
 
-			mailer := mail.Mailer{
-				To:      []string{"sainesh.mamgain@kartrocket.com"},
-				Subject: "Test Mail",
-				Body:    "URL for file: " + url,
-			}
+			// mailer := mail.Mailer{
+			// 	To:      []string{"sainesh.mamgain@kartrocket.com"},
+			// 	Subject: "Test Mail",
+			// 	Body:    "URL for file: " + url,
+			// }
 
-			mailer.Send()
+			// mailer.Send()
+
+			reportshandler.Handle(d.Body)
 
 			d.Ack(false)
 		}
