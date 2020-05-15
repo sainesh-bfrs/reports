@@ -18,12 +18,14 @@ func Handle(b []byte) {
 	json.Unmarshal(b, &r)
 	report := r["report"]
 	options := r["option"]
+	var handle func() []map[string]interface{}
 	switch report {
 	case "admin-report":
-		//adminReport(options)
-		adminreport.Options = options
-		prepareReport("admin-report", adminreport.Handle)
+		adminreport.SetOptions(options)
+		handle = adminreport.Handle
+		break
 	}
+	prepareReport(report.(string), handle)
 }
 
 func prepareReport(name string, s func() []map[string]interface{}) {

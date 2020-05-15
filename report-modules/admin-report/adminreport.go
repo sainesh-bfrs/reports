@@ -13,13 +13,12 @@ import (
 	"sync"
 )
 
-// Options ...
-var Options interface{}
+var options interface{}
 
 // Handle ...
 func Handle() []map[string]interface{} {
 
-	fmt.Println("printing : ", Options)
+	fmt.Println("printing : ", options)
 
 	type mapper struct {
 		CompanyID uint8
@@ -48,4 +47,9 @@ func Handle() []map[string]interface{} {
 		}
 	}
 	return total
+}
+
+// SetOptions ...
+func SetOptions(o interface{}) {
+	options = o
 }
